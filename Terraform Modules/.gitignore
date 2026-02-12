@@ -1,12 +1,24 @@
+# Ignore everything by default
 *
+
+# Allow terraform code files
 !*.tf
-!*.gitignore
 !*.tfvars
+!*.gitignore
+
+# Allow documents (PDF / Word)
+!*.pdf
+!*.docx
+
+# Allow these folders and everything inside them
 !modules/
 !modules/**
+
 !Dev-Env/
 !Dev-Env/**
+
 !Prod-Env/
 !Prod-Env/**
+
 !Stag-Env/
 !Stag-Env/**
