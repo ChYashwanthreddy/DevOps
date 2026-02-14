@@ -1,0 +1,182 @@
+  10  sudo apt update
+   11  sudo apt install docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+   12  docker --version
+   13  service docker status
+   14  mkdir food-menu-app
+   15  cd food-menu-app
+   16  vi index.html
+   17  ls
+   18  vi dockerfile
+   19  docker build -t food-menu-app:v1
+   20  docker build -t food-menu-app:v1 .
+   21  docker images
+   22  docker run -d --name food-menu -p 80:80 food-menu-app:v1
+   23  docker ps
+   24  ls
+   25  vi index.html
+   26  docker build -t food-menu-app:v2 .
+   27  docker images
+   28  docker stop food-menu
+   29  docker rm food-menu
+   30  ls
+   31  docker images
+   32  docker run -d --name food-menu -p 80:80 food-menu-app:v2
+   33  docker ps
+   34  cd ..
+   35  ls
+   36  mkdir weather-app
+   37  cd weather-app
+   38  vi index.html
+   39  vi dockerfile
+   40  docker build -t weather-app:v1 .
+   41  vi dockerfile
+   42  docker build -t weather-app:v1 .
+   43  docker images
+   44  docker run -d --name weather-app -p 81:80 weather-app:v1
+   45  docker ps
+   46  cd ..
+   47  mkdir event-registration-app
+   48  cd event-registration-app
+   49  vi index.html
+   50  vi dockerfile
+   51  docker build -t event-registration-app:v1 .
+   52  docker images
+   53  docker run -d --name event-registration-app -p 82:80 event-registration-app:v1
+   54  docker ps
+   55  cd ..
+   56  ls
+   57  makdir travel-app
+   58  mkdir travel-app
+   59  ls
+   60  cd travel-app
+   61  vi index.html
+   62  vi dockerfile
+   63  ls
+   64  docker build -t travel-app:v1 .
+   65  docker images
+   66  docker run -d --name travel-app -p 83:80 travel-app:v1
+   67  docker ps
+   68  cd ..
+   69  mkdir product-app
+   70  ls
+   71  cd product-app
+   72  vi index.html
+   73  vi dockerfile
+   74  ls
+   75  docker build -t product-app:v1 .
+   76  docker images
+   77  docker run -d --name product-app -p 84:80 product-app:v1
+   78  docker ps
+   79  cd ..
+   80  history
+   81  mkdir hospital-web-app
+   82  cd hospital-web-app
+   83  vi index.html
+   84  touch script.js style.css
+   85  ls
+   86  vi style.css
+   87  vi script.js
+   88  vi dockerfile
+   89  docker build -t hospital-web-app:v1 .
+   90  docker images
+   91  docker run -d --name hospital-web-app -p 85:80 hospital-web-app:v1
+   92  docker ps
+   93  ls
+   94  git init
+   95  git add .
+   96  git commit -m "Hospital static web app with Dockerfile"
+   97  git branch -M main
+   98  git remote add origin https://github.com/ChYashwanthreddy/hospital-static-web-app.git
+   99  git push -u origin main
+  100  git pull origin main --allow-unrelated-histories
+  101  git push -u origin main
+  102  git init
+  103  git remote remove origin
+  104  git remote add origin https://github.com/ChYashwanthreddy/Hospital-Web-App.git
+  105  git push -u origin main
+  106  cd ..
+  107  mkdir school-web-app
+  108  cd school-web-app
+  109  touch index.html script.js style.css
+  110  vi index.html
+  111  vi style.css
+  112  vi script.js
+  113  vi dockerfile
+  114  docker build -t school-web-app:v1 .
+  115  docker run -d --name school-web-app -p 86:80 school-web-app:v1
+  116  docker ps
+  117  git init
+  118  git add .
+  119  git commit -m "School static web app with Dockerfile"
+  120  git branch -M main
+  121  git remote add origin https://github.com/ChYashwanthreddy/School-Web-App.git
+  122  git push -u origin main
+  123  cd ..
+  124  mkdir ecommerce-web-app
+  125  cd ecommerce-web-app
+  126  touch index.html script.js style.css dockerfile
+  127  ls
+  128  vi index.html
+  129  vi style.css
+  130  vi script.js
+  131  vi dockerfile
+  132  docker build -t ecommerce-web-app:v1 .
+  133  docker images
+  134  docker run -d --name ecommerce-web-app -p 87:80 ecommerce-web-app:v1
+  135  docker ps
+  136  docker images
+  137  docker stop ecommerce-app
+  138  docker run -d --name ecommerce-app -p 8087:80 ecommerce-web-app:v1
+  139  docker ps
+  140  git init
+  141  git add .
+  142  git branch -M main
+  143  git remote add origin https://github.com/ChYashwanthreddy/Ecommerce-Web-App.git
+  144  git push -u origin main
+  145  git init
+  146  git add .
+  147  git commit -m "E-commerce static web app with Dockerfile"
+  148  git branch -M main
+  149  git remote add origin https://github.com/ChYashwanthreddy/Ecommerce-Web-App.git
+  150  git push -u origin main
+  151  cd ..
+  152  mkdir fitness-web-app
+  153  cd fitness-web-app
+  154  touch index.html style.css script.js dockerfile
+  155  ls
+  156  vi index.html
+  157  vi style.css
+  158  vi script.js
+  159  vi dockerfile
+  160  docker build -t fitness-web-app:v1 .
+  161  docker images
+  162  docker run -d --name fitness-app -p 8088:80 fitness-web-app:v1
+  163  docker ps
+  164  git init
+  165  git add .
+  166  git commit -m "Fitness static web app with Dockerfile"
+  167  git branch -M main
+  168  git remote add origin https://github.com/ChYashwanthreddy/Fitness-Web-App.git
+  169  git push -u origin main
+  170  cd ..
+  171  mkdir devops-monitoring-web-app
+  172  cd devops-monitoring-web-app
+  173  touch index.html style.css script.js dockerfile
+  174  ls
+  175  vi index.html
+  176  vi style.css
+  177  vi script.js
+  178  vi dockerfile
+  179  docker build -t devops-monitoring-web-app:v1 .
+  180  docker images
+  181  docker run -d --name devops-monitoring-app -p 8089:80 devops-monitoring-web-app:v1
+  182  docker ps
+  183  git init
+  184  git add .
+  185  git commit -m "DevOps monitoring static web app with Dockerfile"
+  186  git branch -M main
+  187  git remote add origin https://github.com/ChYashwanthreddy/DevOps-Monitoring-Web-App.git
+  188  git push -u origin main
+  189  cd ..
+  190  history
+root@ip-172-31-10-62:/home/ubuntu#
