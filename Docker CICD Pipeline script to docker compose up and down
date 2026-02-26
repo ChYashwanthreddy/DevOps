@@ -21,8 +21,8 @@ pipeline {
         }
         stage('deploy to comopse'){
             steps {
-               // sh 'docker-compose up -d'
-               sh 'docker-compose down'
+               // sh 'docker-compose up -d' when use this uncomment it 
+               sh 'docker-compose down'         # when use this comment aboveline and do
             }
         }
     }
