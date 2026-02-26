@@ -1,0 +1,37 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('git checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/ChYashwanthreddy/fss-Retail-App_kubernetes.git'
+            }
+        }
+        
+        stage('docker build, tag & push'){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                      sh 'docker build -t fss-retail-app:v1.0.1 .'
+                      sh 'docker tag fss-retail-app:v1.0.1 yashwanth1712/fss-retail-app:v1.0.1'
+                      sh 'docker push yashwanth1712/fss-retail-app:v1.0.1'
+                   }
+                }
+            }
+        }
+        stage('deploy to comopse'){
+            steps {
+               // sh 'docker-compose up -d'
+               sh 'docker-compose down'
+            }
+        }
+    }
+}
+
+
+
+# for folder permission error in jenkins pipeline, run below commands on jenkins VM only.
+
+sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/cicd-pipeline 
+last in path use path as what in jenkins build console output 
+--- pipeline name no space give in  naming  of pipeline
