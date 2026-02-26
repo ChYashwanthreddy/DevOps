@@ -1,0 +1,23 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('git checkout') {
+            steps {
+                git branch: 'master', url: 'https://github.com/ChYashwanthreddy/fss-Retail-App_kubernetes.git'
+            }
+        }
+        
+        stage('docker build, tag & push'){
+            steps{
+                script{
+                    withDockerRegistry(credentialsId: 'docker-cred', toolName: 'docker') {
+                      sh 'docker build -t fss-retail-app:v1.0.1 .'
+                      sh 'docker tag fss-retail-app:v1.0.1 yashwanth1712/fss-retail-app:v1.0.1'
+                      sh 'docker push yashwanth1712/fss-retail-app:v1.0.1'
+                   }
+                }
+            }
+        }
+    }
+}
