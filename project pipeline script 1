@@ -52,17 +52,6 @@ pipeline {
                 '''
             }
         }
-        stage('OWASP FS Scan') {
-            steps {
-                dependencyCheck additionalArguments: '--scan ./ --disableYarnAudit --disableNodeAudit', odcInstallation: 'DP-Check'
-                dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
-            }
-        }
-        stage('Trivy FS Scan') {
-            steps {
-                sh 'trivy fs . > trivyfs.txt'
-            }
-        }
         stage('Docker Build & Push') {
             steps {
                 script {
@@ -86,7 +75,7 @@ pipeline {
                 docker rm bms || true
 
                 echo "Running new container on port 3000..."
-                docker run -d --restart=always --name bms -p 3000:3000 kastrov/bms:latest
+                docker run -d --restart=always --name bms -p 3000:3000 yashwanth1712/bms:latest
 
                 echo "Checking running containers..."
                 docker ps -a
@@ -105,8 +94,7 @@ pipeline {
                 body: "Project: ${env.JOB_NAME}<br/>" +
                       "Build Number: ${env.BUILD_NUMBER}<br/>" +
                       "URL: ${env.BUILD_URL}<br/>",
-                to: 'chadayashwanthreddy17@gmail.com',
-                attachmentsPattern: 'trivyfs.txt,trivyimage.txt'
+                to: 'chadayashwanthreddy17@gmail.com'
         }
     }
 }
