@@ -1,0 +1,50 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ChYashwanthreddy/Book-My-Show.git'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh '''
+                echo "Building Docker Image"
+
+                docker build -t bms:v1 \
+                -f bookmyshow-app/Dockerfile \
+                bookmyshow-app
+                '''
+            }
+        }
+
+        stage('Tag Docker Image') {
+            steps {
+                sh '''
+                echo "Tagging Docker Image"
+
+                docker tag bms:v1 yashwanth1712/bms:v1
+                '''
+            }
+        }
+
+        stage('Push Image to DockerHub') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+
+                        sh '''
+                        echo "Pushing Image to DockerHub"
+
+                        docker push yashwanth1712/bms:v1
+                        '''
+                    }
+                }
+            }
+        }
+
+    }
+}
