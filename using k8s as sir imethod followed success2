@@ -1,0 +1,52 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('git checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ChYashwanthreddy/Book-My-Show.git'
+            }
+        }
+
+        stage('docker build, tag & push') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+
+                        sh '''
+                        echo "Building Docker Image"
+
+                        docker build -t bms:v1.0.0 -f bookmyshow-app/Dockerfile bookmyshow-app
+
+                        echo "Tagging Image"
+
+                        docker tag bms:v1.0.0 yashwanth1712/bms:v1.0.0
+
+                        echo "Pushing Image to DockerHub"
+
+                        docker push yashwanth1712/bms:v1.0.0
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Kubernetes Cluster') {
+            steps {
+                sh '''
+                echo "Deploying to Kubernetes Cluster"
+
+                kubectl apply -f deployment.yml
+                kubectl apply -f service.yml
+
+                echo "Checking Kubernetes Resources"
+
+                kubectl get pods
+                kubectl get svc
+                '''
+            }
+        }
+
+    }
+}
