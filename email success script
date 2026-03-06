@@ -1,0 +1,152 @@
+pipeline {
+    agent any
+
+    tools {
+        jdk 'jdk21'
+        nodejs 'node23'
+    }
+
+    environment {
+        SCANNER_HOME = tool 'sonar-scanner'
+    }
+
+    stages {
+
+        stage('Clean Workspace') {
+            steps {
+                cleanWs()
+            }
+        }
+
+        stage('Checkout Code from GitHub') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ChYashwanthreddy/Book-My-Show.git'
+                sh 'ls -la'
+            }
+        }
+
+        stage('SonarQube Analysis') {
+            steps {
+                withSonarQubeEnv('sonar-server') {
+                    sh '''
+                    $SCANNER_HOME/bin/sonar-scanner \
+                    -Dsonar.projectName=BMS \
+                    -Dsonar.projectKey=BMS \
+                    -Dsonar.sources=bookmyshow-app/src
+                    '''
+                }
+            }
+        }
+
+        stage('Quality Gate') {
+            steps {
+                script {
+                    waitForQualityGate abortPipeline: false, credentialsId: 'Sonar-token'
+                }
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh '''
+                cd bookmyshow-app
+
+                if [ -f package.json ]; then
+                    rm -rf node_modules package-lock.json
+                    npm install
+                else
+                    echo "package.json not found"
+                    exit 1
+                fi
+                '''
+            }
+        }
+
+        stage('Docker Build & Push') {
+            steps {
+                script {
+                    withDockerRegistry(credentialsId: 'docker', toolName: 'docker') {
+
+                        sh '''
+                        echo "Building Docker image..."
+
+                        docker build --no-cache \
+                        -t yashwanth1712/bms:latest \
+                        -f bookmyshow-app/Dockerfile bookmyshow-app
+
+                        echo "Pushing Docker image..."
+
+                        docker push yashwanth1712/bms:latest
+                        '''
+                    }
+                }
+            }
+        }
+
+        stage('Deploy to Docker Container') {
+            steps {
+                sh '''
+                echo "Stopping old container..."
+                docker stop bms || true
+
+                echo "Removing old container..."
+                docker rm bms || true
+
+                echo "Running new container..."
+                docker run -d \
+                --restart=always \
+                --name bms \
+                -p 3000:3000 \
+                yashwanth1712/bms:latest
+
+                echo "Checking containers..."
+                docker ps -a
+
+                echo "Fetching logs..."
+                sleep 10
+                docker logs bms
+                '''
+            }
+        }
+
+    }
+
+    post {
+
+        success {
+            emailext(
+                subject: "SUCCESS: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
+                body: """
+Build Successful
+
+Project: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
+
+Application URL:
+http://54.169.186.211:3000
+
+Build Logs:
+${env.BUILD_URL}
+""",
+                to: "chadayashwanthreddy17@gmail.com"
+            )
+        }
+
+        failure {
+            emailext(
+                subject: "FAILED: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
+                body: """
+Build Failed
+
+Project: ${env.JOB_NAME}
+Build Number: ${env.BUILD_NUMBER}
+
+Check Logs:
+${env.BUILD_URL}
+""",
+                to: "chadayashwanthreddy17@gmail.com"
+            )
+        }
+
+    }
+}
