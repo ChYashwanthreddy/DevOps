@@ -117,33 +117,23 @@ pipeline {
             emailext(
                 subject: "SUCCESS: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
                 body: """
-Build Successful
+                Build Successful
+                Project: ${env.JOB_NAME}
+                Build Number: ${env.BUILD_NUMBER}
+                Application URL:http://54.169.186.211:3000
 
-Project: ${env.JOB_NAME}
-Build Number: ${env.BUILD_NUMBER}
-
-Application URL:
-http://54.169.186.211:3000
-
-Build Logs:
-${env.BUILD_URL}
-""",
+                Build Logs:${env.BUILD_URL}""",
                 to: "chadayashwanthreddy17@gmail.com"
             )
         }
-
         failure {
             emailext(
                 subject: "FAILED: ${env.JOB_NAME} Build #${env.BUILD_NUMBER}",
                 body: """
-Build Failed
-
-Project: ${env.JOB_NAME}
-Build Number: ${env.BUILD_NUMBER}
-
-Check Logs:
-${env.BUILD_URL}
-""",
+                Build Failed
+                Project: ${env.JOB_NAME}
+                Build Number: ${env.BUILD_NUMBER}
+                Check Logs:${env.BUILD_URL}""",
                 to: "chadayashwanthreddy17@gmail.com"
             )
         }
